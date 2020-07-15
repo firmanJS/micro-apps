@@ -1,0 +1,9 @@
+/service/todo/node_modules
+/service/user/public/hot
+/service/user/public/storage
+/service/user/storage/*.key
+/vendor
+.env
+.idea
+.service
+npm-debug.log

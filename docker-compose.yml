@@ -1,0 +1,44 @@
+version: '3'
+services:
+
+  #PHP & APACHE
+  user_management_service:
+    build:
+      context: ./service/user
+      dockerfile: Dockerfile
+    container_name: user_management_service
+    depends_on:
+      - mysql
+    volumes:
+      - ./service/user/:/var/www/html
+    ports:
+      - "8080:80"
+    networks:
+      - internal
+
+  #MySQL Service
+  mysql:
+    image: mysql:5.7
+    container_name: mysql_db
+    restart: always
+    ports:
+      - "3307:3306"
+    env_file:
+      - .env
+    volumes:
+      - vol_mysql_data:/var/lib/mysql/
+    networks:
+      - internal
+
+#Docker Networks
+networks:
+  internal:
+    driver: bridge
+
+#Volumes
+volumes:
+  vol_mysql_data:
+    driver: local
+
+  vendor_data:
+    driver: local
