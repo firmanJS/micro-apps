@@ -7,13 +7,13 @@ use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
-  public function index(Request $request)
-  {
-    $uri = $request->url();
-    $data = array('doc' => $uri . '/documentation');
-    return response()->json([
-      'message' => 'Welcome to api service user management',
-      'data' => $data
-    ]);
-  }
+    public function index(Request $request)
+    {
+        $uri = $request->url();
+        $data = array('doc' => $uri . '/documentation');
+        return response()->json([
+            'message' => 'Welcome to api service user management',
+            'data' => $data
+        ]);
+    }
 }

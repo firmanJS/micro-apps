@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,3 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('v1/', 'API\v1\IndexController@index');
+Route::post('v1/user', 'API\v1\UserController@store');
+Route::post('v1/user/authenticate', 'API\v1\UserController@authenticate');
+Route::group(['middleware' => ['jwt.verify']], function() {
+    Route::get('v1/user', 'API\v1\UserController@index');
+});

@@ -1,0 +1,24 @@
+{
+  "name": "todo",
+  "version": "1.0.0",
+  "description": "todo service",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm run test",
+    "start": "nodemon --max-old-space-size=2048 server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/firmanJS/micro-apps/tree/master/service/todo"
+  },
+  "keywords": [
+    "expressjs",
+    "restfullapi"
+  ],
+  "author": "firmanjs",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4"
+  }
+}
