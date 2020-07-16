@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-class User extends Model implements JWTSubject
+class User extends Authenticatable  implements JWTSubject
 {
     /**
      * The attributes that are mass assignable.
