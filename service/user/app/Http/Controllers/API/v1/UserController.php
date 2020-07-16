@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
-use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
 class UserController extends Controller
 {
@@ -19,18 +18,17 @@ class UserController extends Controller
             if ($request->filled('limit')) {
                 $query->paginate($request->input('limit'));
             }
-
             if ($request->filled('fullname')) {
                 $query->where('users.fullname', 'LIKE', "%{$request->input('fullname')}%");
             }
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'user failed created',
-                'data' => $e
-            ], 500);
+                'message' => 'Get user not sucessfuly',
+                'data' =>  $e->getMessage()
+            ], 400);
         }
         return response()->json([
-            'message' => 'get user sucessfuly',
+            'message' => 'Get user sucessfuly',
             'data' => $query->get()
         ], 200);
     }
@@ -38,16 +36,24 @@ class UserController extends Controller
     public function authenticate(Request $request)
     {
         $credentials = $request->only('username', 'password');
-
         try {
-            if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'invalid_credentials'], 400);
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json([
+                    'message' => 'Invalid credentials',
+                    'data' => []
+                ], 401);
             }
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'could_not_create_token'], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Could not create token',
+                'data' => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json(compact('token'));
+        $user = JWTAuth::user();
+        return response()->json([
+            'message' => 'Login sucessfuly',
+            'data' => compact('user','token')
+        ], 200);
     }
 
     public function store(Request $request)
@@ -62,7 +68,7 @@ class UserController extends Controller
             ]);
 
             if($validator->fails()){
-                return response()->json($validator->errors(),422);
+                return response()->json($validator->errors(), 422);
             }
 
             $user = User::create([
@@ -74,14 +80,58 @@ class UserController extends Controller
             ]);
 
             return response()->json([
-                'message' => 'user created',
+                'message' => 'User created',
                 'data' => $user
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'user failed created',
-                'data' => $e
+                'message' => 'User failed created',
+                'data' =>  $e->getMessage()
             ], 500);
         }
     }
+
+    public function logout()
+    {
+        auth()->logout();
+        return response()->json([
+            'message' => 'Successfully logged out',
+            'data' => []
+        ], 200);
+    }
+
+    public function show($id)
+    {
+        try {
+            $data =  User::findOrFail($id);
+            return response()->json([
+                'message' => 'Get data sucessfuly',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Get data unsucessfuly',
+                'data' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $model = User::findOrFail($id);
+            $model->fill($request->input());
+            $model->save();
+            return response()->json([
+                'message' => 'Update data sucessfuly',
+                'data' => $model
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Update data unsucessfuly',
+                'data' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }
