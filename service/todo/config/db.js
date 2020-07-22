@@ -2,10 +2,6 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
-// const users = process.env.MONGO_INITDB_ROOT_USERNAME
-// const pass = process.env.MONGO_INITDB_ROOT_PASSWORD
-// const dbUrl = 'mongodb://' + users + ':' + pass + '@mongose_services:27017/db_micro_app'
-console.log(process.env.MONGO_URI)
 const connectWithRetry = () => {
   return mongoose.connect(`${process.env.MONGO_URI}`, {
     useNewUrlParser: true,

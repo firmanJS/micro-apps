@@ -1,6 +1,4 @@
-'use strict'
 const Todos = require('../models/TodoModel')
-
 const index = async (req, res) => {
   try {
     const result = await Todos.find()
@@ -19,6 +17,7 @@ const index = async (req, res) => {
 
 const store = async (req, res) => {
   try {
+    console.log(req)
     const todo = new Todos(req.body)
     const result = await todo.save()
     res.json({

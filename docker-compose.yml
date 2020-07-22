@@ -15,7 +15,7 @@ services:
     ports:
       - "8080:80"
     networks:
-      - internal
+      - micro_network
 
   #MySQL Service
   mysql:
@@ -29,13 +29,13 @@ services:
     volumes:
       - vol_mysql_data:/var/lib/mysql/
     networks:
-      - internal
+      - micro_network
 
   mongose_services:
     container_name: mongose_service
     image: mongo:latest
     networks:
-      internal:
+      micro_network:
     env_file:
       - .env
     volumes:
@@ -52,7 +52,7 @@ services:
       context: ./service/todo
       dockerfile: Dockerfile
     networks:
-      internal:
+      micro_network:
     restart: always
     volumes:
       - ./service/todo:/apps
@@ -64,7 +64,7 @@ services:
 
 #Docker Networks
 networks:
-  internal:
+  micro_network:
     driver: bridge
 
 #Volumes
